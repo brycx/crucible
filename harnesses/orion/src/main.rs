@@ -237,9 +237,15 @@ fn handle_kem_decaps(req: &Request) -> Response {
                         );
                     }
                 };
-            let ct = orion_mlkem512::Ciphertext::try_from(ct_bytes.as_slice())
-                .map_err(|_| format!("invalid ciphertext length for 512: {}", ct_bytes.len()))
-                .unwrap();
+            let ct = match orion_mlkem512::Ciphertext::try_from(ct_bytes.as_slice()) {
+                Ok(ct) => ct,
+                Err(_e) => {
+                    return err_response(format!(
+                        "invalid ciphertext length for 512: {}",
+                        ct_bytes.len()
+                    ));
+                }
+            };
 
             // SAFETY: Should not panic under normal circumstances for these tests.
             let ss = sk.decap(&ct).unwrap();
@@ -258,9 +264,15 @@ fn handle_kem_decaps(req: &Request) -> Response {
                         );
                     }
                 };
-            let ct = orion_mlkem768::Ciphertext::try_from(ct_bytes.as_slice())
-                .map_err(|_| format!("invalid ciphertext length for 768: {}", ct_bytes.len()))
-                .unwrap();
+            let ct = match orion_mlkem768::Ciphertext::try_from(ct_bytes.as_slice()) {
+                Ok(ct) => ct,
+                Err(_e) => {
+                    return err_response(format!(
+                        "invalid ciphertext length for 512: {}",
+                        ct_bytes.len()
+                    ));
+                }
+            };
 
             // SAFETY: Should not panic under normal circumstances for these tests.
             let ss = sk.decap(&ct).unwrap();
@@ -280,9 +292,15 @@ fn handle_kem_decaps(req: &Request) -> Response {
                     );
                 }
             };
-            let ct = orion_mlkem1024::Ciphertext::try_from(ct_bytes.as_slice())
-                .map_err(|_| format!("invalid ciphertext length for 1024: {}", ct_bytes.len()))
-                .unwrap();
+            let ct = match orion_mlkem1024::Ciphertext::try_from(ct_bytes.as_slice()) {
+                Ok(ct) => ct,
+                Err(_e) => {
+                    return err_response(format!(
+                        "invalid ciphertext length for 512: {}",
+                        ct_bytes.len()
+                    ));
+                }
+            };
 
             // SAFETY: Should not panic under normal circumstances for these tests.
             let ss = sk.decap(&ct).unwrap();
